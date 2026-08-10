@@ -274,8 +274,27 @@ export const api = {
   },
 
   upload: {
-    image: (file: File) => API_URL ? http<{ url: string }>('/api/upload/image', { method:'POST', body: JSON.stringify({ name: file.name, type: file.type, size: file.size }) }) : localUpload(file),
+  image: async (file: File) => {
+    const base64 = await new Promise<string>((resolve, reject) => {
+      const reader = new FileReader();
+
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = reject;
+
+      reader.readAsDataURL(file);
+    });
+
+    return API_URL
+      ? http<{ url: string; fileId: string }>('/api/upload/image', {
+          method: 'POST',
+          body: JSON.stringify({
+            file: base64,
+            name: file.name,
+          }),
+        })
+      : localUpload(file);
   },
+},
 };
 
 export type Api = typeof api;
