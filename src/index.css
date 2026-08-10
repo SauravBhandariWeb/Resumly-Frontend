@@ -1,0 +1,78 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=JetBrains+Mono:wght@400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --bg: 248 250 252;
+    --fg: 15 23 42;
+  }
+  html { -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+  body {
+    @apply bg-ink-50 text-ink-900 font-sans antialiased;
+    font-feature-settings: 'cv11', 'ss01';
+  }
+  .dark body { @apply bg-ink-950 text-ink-100; }
+  ::selection { @apply bg-primary-500/25; }
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { @apply bg-ink-300 rounded-full; }
+  .dark ::-webkit-scrollbar-thumb { @apply bg-ink-700; }
+  ::-webkit-scrollbar-thumb:hover { @apply bg-ink-400; }
+  .dark ::-webkit-scrollbar-thumb:hover { @apply bg-ink-600; }
+}
+
+@layer components {
+  .glass {
+    @apply bg-white/70 dark:bg-ink-900/60 backdrop-blur-xl border border-white/40 dark:border-white/10;
+  }
+  .card {
+    @apply bg-white dark:bg-ink-900 border border-ink-200/70 dark:border-ink-800 rounded-2xl shadow-soft;
+  }
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl font-medium transition-all duration-200 disabled:opacity-50 disabled:pointer-events-none select-none;
+  }
+  .btn-primary { @apply btn bg-primary-600 text-white hover:bg-primary-700 shadow-soft active:scale-[.98]; }
+  .btn-secondary { @apply btn bg-ink-100 text-ink-800 hover:bg-ink-200 dark:bg-ink-800 dark:text-ink-100 dark:hover:bg-ink-700; }
+  .btn-ghost { @apply btn text-ink-600 hover:bg-ink-100 dark:text-ink-300 dark:hover:bg-ink-800; }
+  .btn-outline { @apply btn border border-ink-200 dark:border-ink-700 text-ink-700 dark:text-ink-200 hover:bg-ink-50 dark:hover:bg-ink-800; }
+  .btn-danger { @apply btn bg-error-600 text-white hover:bg-error-700; }
+  .input {
+    @apply w-full rounded-xl border border-ink-200 dark:border-ink-700 bg-white dark:bg-ink-900 px-3.5 py-2.5 text-sm text-ink-900 dark:text-ink-100 placeholder:text-ink-400
+           focus:outline-none focus:ring-2 focus:ring-primary-500/40 focus:border-primary-500 transition;
+  }
+  .label { @apply block text-sm font-medium text-ink-700 dark:text-ink-300 mb-1.5; }
+  .chip { @apply inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium; }
+  .section-title { @apply text-lg font-display font-semibold text-ink-900 dark:text-ink-100; }
+  .skeleton { @apply relative overflow-hidden bg-ink-100 dark:bg-ink-800 rounded-md; }
+  .skeleton::after {
+    content: ''; @apply absolute inset-0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.45), transparent);
+    transform: translateX(-100%); animation: shimmer 1.6s infinite;
+  }
+  .dark .skeleton::after { background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent); }
+  .link { @apply text-primary-600 dark:text-primary-400 hover:underline; }
+}
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  .text-balance { text-wrap: balance; }
+}
+
+/* Resume preview (A4) — uses only HEX/RGB so html2canvas renders faithfully */
+.resume-page {
+  background: #ffffff;
+  color: #1e293b;
+  font-family: 'Inter', system-ui, sans-serif;
+  width: 794px; /* A4 @ 96dpi */
+  min-height: 1123px;
+}
+.resume-serif { font-family: 'Source Serif 4', Georgia, serif; }
+.resume-mono { font-family: 'JetBrains Mono', monospace; }
+@media print {
+  .no-print { display: none !important; }
+}
