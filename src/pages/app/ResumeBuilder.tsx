@@ -75,12 +75,46 @@ export default function ResumeBuilder() {
     finally { setExporting(false); }
   };
 
-  const onAIApplyText = (text: string, feature: AIFeature) => {
-    if (!resume) return;
-    if (feature === 'summary') patchData({ summary: { ...resume.data.summary, text } });
-    else if (feature === 'coverLetter') { navigator.clipboard.writeText(text); toast('info', 'Cover letter copied to clipboard.'); }
-    else if (['improveGrammar','rewrite','shorten','expand','projectDescription'].includes(feature)) { navigator.clipboard.writeText(text); toast('info', 'Result copied — paste where needed.'); }
-  };
+  
+
+const onAIApplyText = (text: string, feature: AIFeature) => {
+  if (!resume) return
+
+  if (feature === "summary") {
+    patchData({
+      summary: {
+        ...resume.data.summary,
+        text,
+      },
+    })
+  } else if (feature === "projectDescription") {
+    const firstProject = resume.data.projects[0]
+
+    if (firstProject) {
+      patchData({
+        projects: resume.data.projects.map((project, index) =>
+          index === 0
+            ? { ...project, description: text }
+            : project,
+        ),
+      })
+
+      toast("success", "Project description applied to resume.")
+    } else {
+      toast("info", "Add a project first.")
+    }
+  } else if (feature === "coverLetter") {
+    navigator.clipboard.writeText(text)
+    toast("info", "Cover letter copied to clipboard.")
+  } else if (
+    ["improveGrammar", "rewrite", "shorten", "expand"].includes(feature)
+  ) {
+    navigator.clipboard.writeText(text)
+    toast("info", "Result copied — paste where needed.")
+  }
+}
+
+
   const onAIApplyArray = (items: string[], feature: AIFeature) => {
     if (!resume) return;
     if (feature === 'bullets') {
