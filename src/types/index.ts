@@ -1,4 +1,4 @@
-// Shared domain types for Resumly
+
 
 export type ID = string;
 
